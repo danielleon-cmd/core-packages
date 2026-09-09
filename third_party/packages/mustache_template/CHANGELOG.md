@@ -3,8 +3,6 @@
 * Adopts `code-excerpt` for the README's Dart snippets so they're validated
   against compilable, analyzed source (fixes an invalid snippet and a
   copy-pasted duplicate example that had gone unnoticed).
-* Removes the `exempt_from_excerpts` CI opt-out now that the README is
-  excerpt-backed.
 
 ## 2.0.5
 

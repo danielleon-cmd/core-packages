@@ -10,9 +10,9 @@ This library passes all [mustache specification](https://github.com/mustache/spe
 
 ## Example usage
 
-<?code-excerpt "readme_excerpts.dart (BasicUsage)"?>
+<?code-excerpt "main.dart (BasicUsage)"?>
 ```dart
-  final source = '''
+  const source = '''
 {{# names }}
   <div>{{ lastname }}, {{ firstname }}</div>
 {{/ names }}
@@ -24,7 +24,7 @@ This library passes all [mustache specification](https://github.com/mustache/spe
 
   final template = Template(source, name: 'template-filename.html');
 
-  final output = template.renderString(<String, Object>{
+  final String output = template.renderString(<String, Object>{
     'names': <Map<String, String>>[
       <String, String>{'firstname': 'Greg', 'lastname': 'Lowe'},
       <String, String>{'firstname': 'Bob', 'lastname': 'Johnson'},
@@ -53,17 +53,17 @@ By default all output from `{{variable}}` tags is html escaped, this behaviour c
 
 ## Nested paths
 
-<?code-excerpt "readme_excerpts.dart (NestedPaths)"?>
+<?code-excerpt "main.dart (NestedPaths)"?>
 ```dart
 final template = Template('{{ author.name }}');
-final output = template.renderString(<String, Object>{
+final String output = template.renderString(<String, Object>{
   'author': <String, String>{'name': 'Greg Lowe'},
 });
 ```
 
 ## Partials - example usage
 
-<?code-excerpt "readme_excerpts.dart (Partials)"?>
+<?code-excerpt "main.dart (Partials)"?>
 ```dart
 final partial = Template('{{ foo }}', name: 'partial');
 
@@ -77,46 +77,49 @@ Template? resolver(String name) {
 
 final template = Template('{{> partial-name }}', partialResolver: resolver);
 
-final output = template.renderString(<String, String>{'foo': 'bar'}); // bar
+final String output = template.renderString(<String, String>{'foo': 'bar'}); // bar
 ```
 
 ## Lambdas - example usage
 
-<?code-excerpt "readme_excerpts.dart (LambdaReturningValue)"?>
+<?code-excerpt "main.dart (LambdaReturningValue)"?>
 ```dart
 final template = Template('{{# foo }}inner{{/ foo }}');
 Object lambda(Object? _) => 'bar';
-final output = template.renderString(<String, Object>{'foo': lambda}); // bar
+final String output = template.renderString(<String, Object>{'foo': lambda}); // bar
 ```
 
-<?code-excerpt "readme_excerpts.dart (LambdaHidingSection)"?>
+<?code-excerpt "main.dart (LambdaHidingSection)"?>
 ```dart
 final template = Template('{{# foo }}hidden{{/ foo }}');
 Object lambda(Object? _) => 'shown';
-final output = template.renderString(<String, Object>{'foo': lambda}); // shown
+final String output = template.renderString(<String, Object>{'foo': lambda}); // shown
 ```
 
-<?code-excerpt "readme_excerpts.dart (LambdaWithContext)"?>
+<?code-excerpt "main.dart (LambdaWithContext)"?>
 ```dart
 final template = Template('{{# foo }}oi{{/ foo }}');
 Object lambda(LambdaContext ctx) => '<b>${ctx.renderString().toUpperCase()}</b>';
-final output = template.renderString(<String, Object>{'foo': lambda}); // <b>OI</b>
+final String output = template.renderString(<String, Object>{'foo': lambda}); // <b>OI</b>
 ```
 
-<?code-excerpt "readme_excerpts.dart (LambdaWithContextAndVariables)"?>
+<?code-excerpt "main.dart (LambdaWithContextAndVariables)"?>
 ```dart
 final template = Template('{{# foo }}{{bar}}{{/ foo }}');
 Object lambda(LambdaContext ctx) => '<b>${ctx.renderString().toUpperCase()}</b>';
-final output = template.renderString(<String, Object>{'foo': lambda, 'bar': 'pub'}); // <b>PUB</b>
+final String output = template.renderString(<String, Object>{
+  'foo': lambda,
+  'bar': 'pub',
+}); // <b>PUB</b>
 ```
 
 In the following example `LambdaContext.renderSource(source)` re-parses the source string in the current context, this is the default behaviour in many mustache implementations. Since re-parsing the content is slow, and often not required, this library makes this step optional.
 
-<?code-excerpt "readme_excerpts.dart (LambdaReparsingSource)"?>
+<?code-excerpt "main.dart (LambdaReparsingSource)"?>
 ```dart
 final template = Template('{{# foo }}{{bar}}{{/ foo }}');
 Object lambda(LambdaContext ctx) => ctx.renderSource('${ctx.source} {{cmd}}');
-final output = template.renderString(<String, Object>{
+final String output = template.renderString(<String, Object>{
   'foo': lambda,
   'bar': 'pub',
   'cmd': 'build',

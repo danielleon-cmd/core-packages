@@ -2,9 +2,9 @@
 
 import 'package:mustache_template/mustache_template.dart';
 
-void basicUsage() {
+void _basicUsage() {
   // #docregion BasicUsage
-  final source = '''
+  const source = '''
 {{# names }}
   <div>{{ lastname }}, {{ firstname }}</div>
 {{/ names }}
@@ -16,7 +16,7 @@ void basicUsage() {
 
   final template = Template(source, name: 'template-filename.html');
 
-  final output = template.renderString(<String, Object>{
+  final String output = template.renderString(<String, Object>{
     'names': <Map<String, String>>[
       <String, String>{'firstname': 'Greg', 'lastname': 'Lowe'},
       <String, String>{'firstname': 'Bob', 'lastname': 'Johnson'},
@@ -26,17 +26,17 @@ void basicUsage() {
   print(output);
 }
 
-void nestedPaths() {
+void _nestedPaths() {
   // #docregion NestedPaths
   final template = Template('{{ author.name }}');
-  final output = template.renderString(<String, Object>{
+  final String output = template.renderString(<String, Object>{
     'author': <String, String>{'name': 'Greg Lowe'},
   });
   // #enddocregion NestedPaths
   print(output);
 }
 
-void partials() {
+void _partials() {
   // #docregion Partials
   final partial = Template('{{ foo }}', name: 'partial');
 
@@ -50,52 +50,55 @@ void partials() {
 
   final template = Template('{{> partial-name }}', partialResolver: resolver);
 
-  final output = template.renderString(<String, String>{'foo': 'bar'}); // bar
+  final String output = template.renderString(<String, String>{'foo': 'bar'}); // bar
   // #enddocregion Partials
   print(output);
 }
 
-void lambdaReturningValue() {
+void _lambdaReturningValue() {
   // #docregion LambdaReturningValue
   final template = Template('{{# foo }}inner{{/ foo }}');
   Object lambda(Object? _) => 'bar';
-  final output = template.renderString(<String, Object>{'foo': lambda}); // bar
+  final String output = template.renderString(<String, Object>{'foo': lambda}); // bar
   // #enddocregion LambdaReturningValue
   print(output);
 }
 
-void lambdaHidingSection() {
+void _lambdaHidingSection() {
   // #docregion LambdaHidingSection
   final template = Template('{{# foo }}hidden{{/ foo }}');
   Object lambda(Object? _) => 'shown';
-  final output = template.renderString(<String, Object>{'foo': lambda}); // shown
+  final String output = template.renderString(<String, Object>{'foo': lambda}); // shown
   // #enddocregion LambdaHidingSection
   print(output);
 }
 
-void lambdaWithContext() {
+void _lambdaWithContext() {
   // #docregion LambdaWithContext
   final template = Template('{{# foo }}oi{{/ foo }}');
   Object lambda(LambdaContext ctx) => '<b>${ctx.renderString().toUpperCase()}</b>';
-  final output = template.renderString(<String, Object>{'foo': lambda}); // <b>OI</b>
+  final String output = template.renderString(<String, Object>{'foo': lambda}); // <b>OI</b>
   // #enddocregion LambdaWithContext
   print(output);
 }
 
-void lambdaWithContextAndVariables() {
+void _lambdaWithContextAndVariables() {
   // #docregion LambdaWithContextAndVariables
   final template = Template('{{# foo }}{{bar}}{{/ foo }}');
   Object lambda(LambdaContext ctx) => '<b>${ctx.renderString().toUpperCase()}</b>';
-  final output = template.renderString(<String, Object>{'foo': lambda, 'bar': 'pub'}); // <b>PUB</b>
+  final String output = template.renderString(<String, Object>{
+    'foo': lambda,
+    'bar': 'pub',
+  }); // <b>PUB</b>
   // #enddocregion LambdaWithContextAndVariables
   print(output);
 }
 
-void lambdaReparsingSource() {
+void _lambdaReparsingSource() {
   // #docregion LambdaReparsingSource
   final template = Template('{{# foo }}{{bar}}{{/ foo }}');
   Object lambda(LambdaContext ctx) => ctx.renderSource('${ctx.source} {{cmd}}');
-  final output = template.renderString(<String, Object>{
+  final String output = template.renderString(<String, Object>{
     'foo': lambda,
     'bar': 'pub',
     'cmd': 'build',
@@ -105,12 +108,12 @@ void lambdaReparsingSource() {
 }
 
 void main() {
-  basicUsage();
-  nestedPaths();
-  partials();
-  lambdaReturningValue();
-  lambdaHidingSection();
-  lambdaWithContext();
-  lambdaWithContextAndVariables();
-  lambdaReparsingSource();
+  _basicUsage();
+  _nestedPaths();
+  _partials();
+  _lambdaReturningValue();
+  _lambdaHidingSection();
+  _lambdaWithContext();
+  _lambdaWithContextAndVariables();
+  _lambdaReparsingSource();
 }
